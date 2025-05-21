@@ -2,8 +2,6 @@ import pandas as pd
 from xgboost import XGBRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.model_selection import GridSearchCV
-from sklearn.model_selection import RandomizedSearchCV
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -11,16 +9,18 @@ import matplotlib.pyplot as plt
 microdados = pd.read_csv(r'microdados_tratados\microdados_tratados_enem_2023.csv')
 print("Dimensões originais:", microdados.shape)
 
+colunas_excluir = ['NU_NOTA_CN', 'NU_NOTA_CH', 'NU_NOTA_MT','NU_NOTA_LC', 
+         'NU_NOTA_REDACAO', 'NU_NOTA_COMP1', 'NU_NOTA_COMP2','NU_NOTA_COMP3', 
+         'NU_NOTA_COMP4', 'NU_NOTA_COMP5', 'NO_MUNICIPIO_PROVA', 'SG_UF_PROVA']
+
 # Definir variável alvo
-alvo = 'NU_NOTA_CN'
+alvo = 'NU_NOTA_LC'
+colunas_excluir.remove(alvo)
 
 # Remoção dos restantes das notas e colunas não importantes
-notas_restantes = ['NU_NOTA_CH', 'NU_NOTA_MT','NU_NOTA_LC', 'NU_NOTA_REDACAO', 
-                   'NU_NOTA_COMP1', 'NU_NOTA_COMP2','NU_NOTA_COMP3', 'NU_NOTA_COMP4', 
-                   'NU_NOTA_COMP5', 'NO_MUNICIPIO_PROVA', 'SG_UF_PROVA']
 
 # Separar features (X) e target (y)
-X = microdados.drop(columns=[alvo] + notas_restantes)
+X = microdados.drop(columns=[alvo] + colunas_excluir)
 y = microdados[alvo]
 
 # Lista de colunas categóricas para One-Hot Encoding
@@ -55,35 +55,36 @@ model.fit(X_train, y_train)
 # Avaliar
 y_pred = model.predict(X_test)
 mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
 r2 = r2_score(y_test, y_pred)
 
 print(f"\nMSE: {mse:.2f}")
+print(f"RMSE: {rmse:.2f}")
 print(f"R²: {r2:.4f}")
 
-
 # Teste
-x_ax = range(len(y_test))
-plt.figure(figsize=(10, 8))
-plt.plot(x_ax, y_test, label= 'Original')
-plt.plot(x_ax, y_pred, label= 'Predição')
-plt.title('Comparação de original e predição')
-plt.show()
+#x_ax = range(len(y_test))
+#plt.figure(figsize=(10, 8))
+#plt.plot(x_ax, y_test, label= 'Original')
+#plt.plot(x_ax, y_pred, label= 'Predição')
+#plt.title('Comparação de original e predição')
+#plt.show()
 
 # Gráfico de importância de features (CORRIGIDO)
-#feature_names = X_encoded.columns  # Nomes das features após One-Hot
-#importances = model.feature_importances_
+feature_names = X_encoded.columns  # Nomes das features após One-Hot
+importances = model.feature_importances_
 
 # Ordenar features por importância
-#sorted_idx = importances.argsort()[::-1]  # Ordem decrescente
-#feature_names_sorted = [feature_names[i] for i in sorted_idx]
-#importances_sorted = importances[sorted_idx]
+sorted_idx = importances.argsort()[::-1]  # Ordem decrescente
+feature_names_sorted = [feature_names[i] for i in sorted_idx]
+importances_sorted = importances[sorted_idx]
 
 # Plotar apenas as top N features (ex: top 20) para melhor visualização
-#top_n = 20
-#plt.figure(figsize=(10, 8))
-#plt.barh(feature_names_sorted[:top_n], importances_sorted[:top_n])
-#plt.xlabel("Importância")
-#plt.title("Top 20 Features Mais Importantes (XGBoost)")
-#plt.gca().invert_yaxis()  # Inverter eixo Y para mostrar a mais importante no topo
-#plt.tight_layout()
-#plt.show()
+top_n = 20
+plt.figure(figsize=(10, 8))
+plt.barh(feature_names_sorted[:top_n], importances_sorted[:top_n])
+plt.xlabel("Importância")
+plt.title("Top 20 Features Mais Importantes (XGBoost)")
+plt.gca().invert_yaxis()  # Inverter eixo Y para mostrar a mais importante no topo
+plt.tight_layout()
+plt.show()
