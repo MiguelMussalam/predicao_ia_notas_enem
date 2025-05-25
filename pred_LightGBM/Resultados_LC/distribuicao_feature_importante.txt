@@ -1,0 +1,25 @@
+Valores mais comuns da feature 'Q006' para a classe 0:
+Q006
+1    64115
+2    21085
+0    17656
+3    11702
+4     6771
+Name: count, dtype: int64
+
+Valores mais comuns da feature 'Q006' para a classe 1:
+Q006
+1    631866
+2    341531
+3    240293
+4    166266
+6    151303
+Name: count, dtype: int64
+
+Valores mais comuns da feature 'Q006' para a classe 2:
+Q006
+6    40766
+1    37337
+2    34554
+3    33159
+4    30062
