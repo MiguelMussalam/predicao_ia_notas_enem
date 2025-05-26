@@ -1,0 +1,26 @@
+Valores mais comuns da feature 'TP_FAIXA_ETARIA' para a classe 0:
+TP_FAIXA_ETARIA
+3    67816
+2    55527
+4    28854
+1    24950
+5    15826
+Name: count, dtype: int64
+
+Valores mais comuns da feature 'TP_FAIXA_ETARIA' para a classe 1:
+TP_FAIXA_ETARIA
+3    526532
+2    482697
+1    226661
+4    219476
+5    125798
+Name: count, dtype: int64
+
+Valores mais comuns da feature 'TP_FAIXA_ETARIA' para a classe 2:
+TP_FAIXA_ETARIA
+3    60542
+2    58232
+4    32041
+1    23014
+5    21386
+Name: count, dtype: int64

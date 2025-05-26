@@ -143,6 +143,19 @@ plt.show()
 df_full = X.copy()
 df_full["classe"] = y
 
+# Importância das features (Top 20 por ganho)
+plt.figure(figsize=(10, 8))
+plot_importance(
+    best_model,
+    max_num_features=20,
+    importance_type='gain',
+    title='Top 20 Features Mais Importantes (por ganho)',
+    xlabel='Ganho total'
+)
+plt.tight_layout()
+plt.show()
+
+
 # Exemplo para a feature mais importante
 feature = top_feature
 for c in [0, 1, 2]:
@@ -158,7 +171,6 @@ for c in [0, 1, 2]:
 #print(study.best_params)
 
 #print("\nMelhor f1_weighted score:", study.best_value)
-
 
 
 ## TESTE DE PARÂMETROS COM OPTUNIA
